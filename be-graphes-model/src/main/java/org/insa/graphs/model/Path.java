@@ -51,14 +51,68 @@ public class Path {
      * @throws IllegalArgumentException If the list of nodes is not valid, i.e. two
      *         consecutive nodes in the list are not connected in the graph.
      * 
-     * @deprecated Need to be implemented.
+     * 
      */
     public static Path createShortestPathFromNodes(Graph graph, List<Node> nodes)
             throws IllegalArgumentException {
         List<Arc> arcs = new ArrayList<Arc>();
-        // TODO:
+        int cpt = nodes.size();
+        if(cpt==0) {
+        	return new Path(graph);
+        }
+        if(cpt==1) {
+        	return new Path(graph,nodes.get(0));
+        }
+        else {
+       // int i = 1;
+        Node next;
+        for(Node node: nodes) {
+        	//if(nodes.size() < i) {
+        	Arc premier =null;
+        	if(node.getId()+1 == cpt) {
+        		next = node;
+        		System.out.println("Fin");
+        	
+        	}
+        	else {
+        		next = nodes.get(node.getId()+1);
+        	}
+        	List<Arc> ark= node.getSuccessors();
+        	for(Arc a: ark) {
+        		if(a.getDestination().equals(next)) {
+        			if(premier == null) {
+        				premier = a;
+        				System.out.println("init");
+        			}
+        			else {
+        				if(premier.getLength() > a.getLength() ) {
+        					premier =a;
+        					System.out.println("change");
+        				}
+        			}
+        		}
+        	
+        	}
+        	if((premier ==null)&&(next.equals(node))){
+            	System.out.println("Fini");
+            }
+        	else if((premier ==null)) {
+        		throw new IllegalArgumentException();
+        	}
+        	
+        	else {
+        		arcs.add(premier);
+        		System.out.println("add");
+        	}
+        	
+       // 	i++;	
+        //}
         
-        return new Path(graph, arcs);
+        	}
+        System.out.println("Out");
+        return new Path(graph,arcs);
+        }
+        
     }
 
     /**
@@ -202,7 +256,7 @@ public class Path {
      * 
      */
     public boolean isValid() {
-        // TODO:
+       
     	boolean valid = true;
     	if((this.origin != null)&&(this.arcs.size()!=0)) {
     		if(arcs.get(0).getOrigin() != origin) {
