@@ -30,12 +30,49 @@ public class Path {
      * @throws IllegalArgumentException If the list of nodes is not valid, i.e. two
      *         consecutive nodes in the list are not connected in the graph.
      * 
-     * @deprecated Need to be implemented.
+     * 
      */
     public static Path createFastestPathFromNodes(Graph graph, List<Node> nodes)
             throws IllegalArgumentException {
         List<Arc> arcs = new ArrayList<Arc>();
         // TODO:
+        
+        Node noeud_depart;
+        Node destination;
+        if (nodes.size()==0) {
+        	return new Path(graph);
+        }
+        else if (nodes.size()==1) {
+        	return new Path(graph,nodes.get(0));
+        }
+        else {
+        	for(int i=0;i < nodes.size()-1; i++) {
+        		noeud_depart = nodes.get(i);
+        		destination = nodes.get(i+1);
+        		Arc arc_bon = null;
+        		double temps_arrete =0;
+        		int num_dest = destination.getId();
+        		int nb_passage = 0;
+        		List<Arc> ark = noeud_depart.getSuccessors();
+        		for(Arc a : ark) {
+        			if(a.getDestination().getId() == num_dest) {
+        				nb_passage++;
+        				if(nb_passage==1) {
+        					temps_arrete= a.getMinimumTravelTime();
+        					arc_bon =a;
+        				}
+        				if(temps_arrete >= a.getMinimumTravelTime()) {
+        					temps_arrete = a.getMinimumTravelTime();
+        					arc_bon = a;
+        				}
+        			}
+        		}
+        		if(nb_passage ==0) {
+        			throw new IllegalArgumentException();
+        		}
+        		arcs.add(arc_bon);
+        	}
+        }
         return new Path(graph, arcs);
     }
 
@@ -57,61 +94,64 @@ public class Path {
             throws IllegalArgumentException {
         List<Arc> arcs = new ArrayList<Arc>();
         int cpt = nodes.size();
+        Node node = null;
+        Node nest =null;
         if(cpt==0) {
         	return new Path(graph);
         }
-        if(cpt==1) {
+        else if(cpt==1) {
         	return new Path(graph,nodes.get(0));
         }
         else {
-       // int i = 1;
         Node next;
-        for(Node node: nodes) {
-        	//if(nodes.size() < i) {
+       /* for(Node node: nodes) {
+        	int i = 0;*/
+        	for(int i =0;i < cpt-1;i++ ){ 
+        
         	Arc premier =null;
-        	if(node.getId()+1 == cpt) {
-        		next = node;
-        		System.out.println("Fin");
+        	/*if(node.getId()+1 == cpt) {
+        		next = null;
+        	}*/
         	
-        	}
-        	else {
-        		next = nodes.get(node.getId()+1);
-        	}
+        	//else {
+        		node = nodes.get(i); 
+        		next = nodes.get(i+1);
+        	//}
         	List<Arc> ark= node.getSuccessors();
         	for(Arc a: ark) {
         		if(a.getDestination().equals(next)) {
         			if(premier == null) {
         				premier = a;
-        				System.out.println("init");
         			}
         			else {
         				if(premier.getLength() > a.getLength() ) {
         					premier =a;
-        					System.out.println("change");
         				}
         			}
         		}
+        		/*else {
+        			throw new IllegalArgumentException();
+        		}*/
         	
         	}
-        	if((premier ==null)&&(next.equals(node))){
-            	System.out.println("Fini");
-            }
-        	else if((premier ==null)) {
+        	/*if((premier ==null)&&(next.equals(node))){
+            	System.out.println("Dernier noeud");
+            }*/
+        	if(premier == null) {
         		throw new IllegalArgumentException();
         	}
         	
         	else {
         		arcs.add(premier);
-        		System.out.println("add");
         	}
+        	
         	
        // 	i++;	
         //}
-        
-        	}
-        System.out.println("Out");
-        return new Path(graph,arcs);
+        	}	
+        	
         }
+        return new Path(graph,arcs);
         
     }
 
