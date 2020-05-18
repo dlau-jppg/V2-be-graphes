@@ -36,57 +36,57 @@ public class ShortestPathTest {
 	public static void initAll() throws IOException {
 		// Test sur la carte carré
 		// Récupération des données de la carte carré
-		FileInputStream input1 = new FileInputStream("C:/Users/TAM/Documents/V2-be-graphes/carre.mapgr");
+		FileInputStream carte1 = new FileInputStream("C:/Users/TAM/Documents/V2-be-graphes/carre.mapgr");
 		// Contient des chemins inexistants
-		FileInputStream input2 = new FileInputStream("C:/Users/TAM/Documents/V2-be-graphes/guyane.mapgr");
+		FileInputStream carte2 = new FileInputStream("C:/Users/TAM/Documents/V2-be-graphes/greece.mapgr");
 
-		DataInputStream dataInput1 = new DataInputStream(input1);
+		DataInputStream dataInput1 = new DataInputStream(carte1);
 		BinaryGraphReader binary1 = new BinaryGraphReader(dataInput1);
 		Graph graph1 = binary1.read();
 		binary1.close();
 
-		DataInputStream dataInput2 = new DataInputStream(input2);
+		DataInputStream dataInput2 = new DataInputStream(carte2);
 		BinaryGraphReader binary2 = new BinaryGraphReader(dataInput2);
 		Graph graph2 = binary2.read();
 		binary2.close();
 
 		// Création des datas
 		List<ArcInspector> Listeinspector = ArcInspectorFactory.getAllFilters();
-		ShortestPathData data = new ShortestPathData(graph1, graph1.getNodes().get(1), graph1.getNodes().get(23),
+		ShortestPathData data_1 = new ShortestPathData(graph1, graph1.getNodes().get(5), graph1.getNodes().get(19),
 				Listeinspector.get(0));
-		ShortestPathData data2 = new ShortestPathData(graph1, graph1.getNodes().get(1), graph1.getNodes().get(1),
+		ShortestPathData data_2 = new ShortestPathData(graph1, graph1.getNodes().get(5), graph1.getNodes().get(5),
 				Listeinspector.get(0));
-		ShortestPathData data3 = new ShortestPathData(graph2, graph2.get(11752), graph2.get(576),
+		ShortestPathData data_3 = new ShortestPathData(graph2, graph2.get(404073), graph2.get(767341),
 				Listeinspector.get(0));
-		ShortestPathData data4 = new ShortestPathData(graph2, graph2.getNodes().get(63), graph2.getNodes().get(90),
+		ShortestPathData data_4 = new ShortestPathData(graph2, graph2.getNodes().get(691), graph2.getNodes().get(3465),
 				Listeinspector.get(0));
 
 		// Réalisation des algorithmes sur data
-		DijkstraAlgorithm D1 = new DijkstraAlgorithm(data);
+		DijkstraAlgorithm D1 = new DijkstraAlgorithm(data_1);
 		shortPathD = D1.run().getPath();
-		BellmanFordAlgorithm B1 = new BellmanFordAlgorithm(data);
+		BellmanFordAlgorithm B1 = new BellmanFordAlgorithm(data_1);
 		shortPathB = B1.run().getPath();
-		AStarAlgorithm A1 = new AStarAlgorithm(data);
+		AStarAlgorithm A1 = new AStarAlgorithm(data_1);
 		shortPathA = A1.run().getPath();
 
 		// Réalisation des algorithmes sur data2, chemin null
-		DijkstraAlgorithm D2 = new DijkstraAlgorithm(data2);
+		DijkstraAlgorithm D2 = new DijkstraAlgorithm(data_2);
 		emptyPathD = D2.run().getStatus();
-		AStarAlgorithm A2 = new AStarAlgorithm(data2);
+		AStarAlgorithm A2 = new AStarAlgorithm(data_2);
 		emptyPathA = A2.run().getStatus();
 
 		// Réalisation des algorithles sur data3, chemin inexistant
-		DijkstraAlgorithm D3 = new DijkstraAlgorithm(data3);
+		DijkstraAlgorithm D3 = new DijkstraAlgorithm(data_3);
 		nonexistentPathD = D3.run().getStatus();
-		AStarAlgorithm A3 = new AStarAlgorithm(data3);
+		AStarAlgorithm A3 = new AStarAlgorithm(data_3);
 		nonexistentPathA = A3.run().getStatus();
 
 		// Réalisation des algorithmes sur data4, chemin existant
-		DijkstraAlgorithm D4 = new DijkstraAlgorithm(data4);
+		DijkstraAlgorithm D4 = new DijkstraAlgorithm(data_4);
 		shortPathD4 = D4.run().getPath();
-		BellmanFordAlgorithm B4 = new BellmanFordAlgorithm(data4);
+		BellmanFordAlgorithm B4 = new BellmanFordAlgorithm(data_4);
 		shortPathB4 = B4.run().getPath();
-		AStarAlgorithm A4 = new AStarAlgorithm(data4);
+		AStarAlgorithm A4 = new AStarAlgorithm(data_4);
 		shortPathA4 = A4.run().getPath();
 
 	}
