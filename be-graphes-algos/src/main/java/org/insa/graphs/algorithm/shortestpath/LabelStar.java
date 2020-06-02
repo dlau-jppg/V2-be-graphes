@@ -14,9 +14,10 @@ public class LabelStar extends Label implements Comparable<Label>{
 		return this.cout_estime;
 	}
 	
-	public double setCoutEstime() {
-		return this.cout_estime;
-	}
+	/**public void setCoutEstime(Node sommet, ShortestPathData data) {
+	 * 	
+		coutEstime(sommet,data)
+	}*/
 	public double getTotalCost() {
 		return this.getCost()+this.getCoutEstime();
 	}

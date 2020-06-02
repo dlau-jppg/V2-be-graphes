@@ -91,8 +91,7 @@ public class ShortestPathTest {
 
 	}
 
-	// Chemin court existant -> vérification de la longueure avec Bellman ford en référence
-	// référence, test sur les deux cartes
+	// Test du plus court chemin, et compare avec le chemin obtenu avec Bellman Ford 
 	@Test
 	public void Test1() {
 		assertEquals((long) (shortPathA.getLength()), (long) (shortPathB.getLength()));
@@ -102,7 +101,7 @@ public class ShortestPathTest {
 
 	}
 
-	// Chemin court existant -> vérification du temps avec Bellman ford en référence
+	// Test du plus court chemin, et compare avec le chemin obtenu avec Bellman Ford 
 	@Test
 	public void Test2() {
 		assertEquals((long) (shortPathA.getMinimumTravelTime()), (long) (shortPathB.getMinimumTravelTime()));
@@ -112,14 +111,14 @@ public class ShortestPathTest {
 
 	}
 
-	// Chemin de longueur nulle, on vérifie le statue
+	// Test d'un chemin de longueur nulle, on vérifie s'il est faisable
 	@Test
 	public void Test3() {
 		assertTrue(emptyPathA.equals(AbstractSolution.Status.INFEASIBLE));
 		assertTrue(emptyPathD.equals(AbstractSolution.Status.INFEASIBLE));
 	}
 
-	// Chemin inexistant, vérification du status
+	// Test d'un Chemin inexistant, on vérifie s'il est faisable
 	@Test
 	public void Test4() {
 		assertTrue(nonexistentPathD.equals(AbstractSolution.Status.INFEASIBLE));

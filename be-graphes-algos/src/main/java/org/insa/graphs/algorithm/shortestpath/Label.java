@@ -6,13 +6,13 @@ import org.insa.graphs.model.Node;
 
 public class Label implements Comparable<Label>{
 	
-	private boolean marque;
+	private boolean marque; // permet de savoir si le noeud est marqué
 	
-	private Node pere;
+	private Node pere; // noeud précédent
 	
-	private Node sommet;
+	private Node sommet; // noeud actuelle
 	
-	private double cout;
+	private double cout; // cout entre le précédent noeud et l'actuelle
 	
 	public Label(Node sommet,boolean marque, double cout, Node pere) {
 	this.sommet = sommet;

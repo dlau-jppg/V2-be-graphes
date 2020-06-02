@@ -20,7 +20,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
     @Override
     protected ShortestPathSolution doRun() {
         final ShortestPathData data = getInputData();
-        //DEBUT DE COPIE
+        
         Graph graph = data.getGraph();
 
         final int nbNodes = graph.size();
@@ -43,47 +43,54 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
     
         
         Node currentNode = null;
-       // Arc bestArc = null;
-        Label[] label = new Label[nbNodes];
+     
+        Label[] label = new Label[nbNodes]; 
         label[data.getOrigin().getId()]= newLabel(data.getOrigin(),false,0,data.getOrigin(),data);
         TasLabel.insert(label[data.getOrigin().getId()]);
         boolean found = false;
       
-        
-        for (int i = 0; (!found) && (i < nbNodes)&&(!TasLabel.isEmpty()); ++i) {
+        // Recherche du plus court chemin
+        for (int i = 0; (!found) && (i < nbNodes)&&(!TasLabel.isEmpty()); ++i) { 
         	
         	
-        	
+        	// récupération du label du noeud le plus proche du noeud actuelle
         	Label minLabel = TasLabel.deleteMin();
+        	// marque le label comme vu
         	minLabel.setMarque(true);
+        	// place le label dans le tableau
         	label[minLabel.getSommet().getId()] = minLabel;
+        	// le noeud actuelle est maintenant minLabel 
         	currentNode = minLabel.getSommet();
+        	// Previens que le noeud est marqué
         	notifyNodeMarked(currentNode);
-        	System.out.println("On sort le min");
-        	System.out.println("Node "+currentNode.getId());
         	
+        	//System.out.println("On sort le min");
+        	//System.out.println("Node "+currentNode.getId());
+        	
+        	//si le Noeud actuelle correspond à la desination on arrête l'algorithme
         	if(currentNode == data.getDestination()) {
-        		System.out.println(data.getDestination().getId());
-        		System.out.println("On est ariive");
+        		//System.out.println(data.getDestination().getId());
+        		//System.out.println("On est ariive");
         		found = true;
         	}		
-        	
+        	//sinon on continue de chercher
         	else {
-        		for(Arc arc: currentNode.getSuccessors()) {
-        			if (!data.isAllowed(arc)) {
+        		for(Arc arc: currentNode.getSuccessors()) { // pour tous les sucesseurs du noeud actuelle
+        			if (!data.isAllowed(arc)) {// vérifie que la route est bien accessible par une voiture
                         continue;
                     }
         			
-        			if(label[arc.getDestination().getId()] == null) {
-        				System.out.println("Null");
+        			if(label[arc.getDestination().getId()] == null) { // si le noeud n'a jamais était croisé
+        				//System.out.println("Null");
+        				// ajoute le label du noeud de destination dans le tas, le tableau de label
         				label[arc.getDestination().getId()] = newLabel(arc.getDestination(),false,label[currentNode.getId()].getCost()+data.getCost(arc),currentNode,data);
         				TasLabel.insert(label[arc.getDestination().getId()]);	
-        				// notifyNodeReached(arc.getDestination());
+        				 notifyNodeReached(arc.getDestination());
         				 predecessorArcs[arc.getDestination().getId()] = arc;
         			}
-        			else {
+        			else { // si le noeud à déjà été croisé et s'il n'a pas déjà été marqué, met à jour le label dans le tas et dans le tableau
         				if(label[arc.getDestination().getId()].isMarque() == false) {
-        					System.out.println("false");
+        					//System.out.println("false");
         					double w = data.getCost(arc);
         					double oldDistance = label[arc.getDestination().getId()].getCost();
         	                double newDistance = label[currentNode.getId()].getCost() + w;
@@ -113,10 +120,10 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
             
         }
         
-        //FIN DE COPIE
+        
         
         ShortestPathSolution solution = null;
-        //COPIER A PARTIR DE LA
+  
      // Destination has no predecessor, the solution is infeasible...
         if (predecessorArcs[data.getDestination().getId()] == null) {
         	System.out.println("Infaisable");
@@ -152,6 +159,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
     }
     
     protected Label newLabel(Node sommet,boolean marque,double cout,Node pere,ShortestPathData data) {
+    	// initialisation d'un Label
     	return new Label(sommet,marque,cout,pere);
     }
 
