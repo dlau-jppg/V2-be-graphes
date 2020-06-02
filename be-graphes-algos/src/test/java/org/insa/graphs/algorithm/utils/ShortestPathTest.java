@@ -25,19 +25,18 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class ShortestPathTest {
-	// On se sert de BellmanFord comme référence étant donné qu'il était déjà codé
+	// On prendra comme référence Bellman Ford car on sait qu'il est valide
 
 	// Some paths...
-	private static Path shortPathD, shortPathB, shortPathA, shortPathD4, shortPathB4, shortPathA4;
-	private static AbstractSolution.Status emptyPathD, emptyPathA;
-	private static AbstractSolution.Status nonexistentPathD, nonexistentPathA;
+	private static Path PathD, PathB, PathA, PathD1, PathB1, PathA1;
+	private static AbstractSolution.Status emptyD, emptyA;
+	private static AbstractSolution.Status nonexistentD, nonexistentA;
 
 	@BeforeClass
 	public static void initAll() throws IOException {
 		// Test sur la carte carré
-		// Récupération des données de la carte carré
 		FileInputStream carte1 = new FileInputStream("C:/Users/TAM/Documents/V2-be-graphes/carre.mapgr");
-		// Contient des chemins inexistants
+		// Test sur la carte grèce
 		FileInputStream carte2 = new FileInputStream("C:/Users/TAM/Documents/V2-be-graphes/greece.mapgr");
 
 		DataInputStream dataInput1 = new DataInputStream(carte1);
@@ -50,7 +49,7 @@ public class ShortestPathTest {
 		Graph graph2 = binary2.read();
 		binary2.close();
 
-		// Création des datas
+		// Créations des données
 		List<ArcInspector> Listeinspector = ArcInspectorFactory.getAllFilters();
 		ShortestPathData data_1 = new ShortestPathData(graph1, graph1.getNodes().get(5), graph1.getNodes().get(19),
 				Listeinspector.get(0));
@@ -61,68 +60,68 @@ public class ShortestPathTest {
 		ShortestPathData data_4 = new ShortestPathData(graph2, graph2.getNodes().get(691), graph2.getNodes().get(3465),
 				Listeinspector.get(0));
 
-		// Réalisation des algorithmes sur data
+		// Création des donnés pour les algorithmes, utilisées pour les différents cas
 		DijkstraAlgorithm D1 = new DijkstraAlgorithm(data_1);
-		shortPathD = D1.run().getPath();
+		PathD = D1.run().getPath();
 		BellmanFordAlgorithm B1 = new BellmanFordAlgorithm(data_1);
-		shortPathB = B1.run().getPath();
+		PathB = B1.run().getPath();
 		AStarAlgorithm A1 = new AStarAlgorithm(data_1);
-		shortPathA = A1.run().getPath();
+		PathA = A1.run().getPath();
 
-		// Réalisation des algorithmes sur data2, chemin null
+		
 		DijkstraAlgorithm D2 = new DijkstraAlgorithm(data_2);
-		emptyPathD = D2.run().getStatus();
+		emptyD = D2.run().getStatus();
 		AStarAlgorithm A2 = new AStarAlgorithm(data_2);
-		emptyPathA = A2.run().getStatus();
+		emptyA = A2.run().getStatus();
 
-		// Réalisation des algorithles sur data3, chemin inexistant
+	
 		DijkstraAlgorithm D3 = new DijkstraAlgorithm(data_3);
-		nonexistentPathD = D3.run().getStatus();
+		nonexistentD = D3.run().getStatus();
 		AStarAlgorithm A3 = new AStarAlgorithm(data_3);
-		nonexistentPathA = A3.run().getStatus();
+		nonexistentA = A3.run().getStatus();
 
-		// Réalisation des algorithmes sur data4, chemin existant
+		
 		DijkstraAlgorithm D4 = new DijkstraAlgorithm(data_4);
-		shortPathD4 = D4.run().getPath();
+		PathD1 = D4.run().getPath();
 		BellmanFordAlgorithm B4 = new BellmanFordAlgorithm(data_4);
-		shortPathB4 = B4.run().getPath();
+		PathB1 = B4.run().getPath();
 		AStarAlgorithm A4 = new AStarAlgorithm(data_4);
-		shortPathA4 = A4.run().getPath();
+		PathA1 = A4.run().getPath();
 
 	}
 
-	// Test du plus court chemin, et compare avec le chemin obtenu avec Bellman Ford 
+	// Test du plus court chemin, et compare les longueurs avec la longueur du chemin obtenu avec Bellman Ford 
 	@Test
 	public void Test1() {
-		assertEquals((long) (shortPathA.getLength()), (long) (shortPathB.getLength()));
-		assertEquals((long) (shortPathB.getLength()), (long) (shortPathD.getLength()));
-		assertEquals((long) (shortPathA4.getLength()), (long) (shortPathB4.getLength()));
-		assertEquals((long) (shortPathB4.getLength()), (long) (shortPathD4.getLength()));
+		assertEquals((long) (PathA.getLength()), (long) (PathB.getLength()));
+		assertEquals((long) (PathB.getLength()), (long) (PathD.getLength()));
+		assertEquals((long) (PathA1.getLength()), (long) (PathB1.getLength()));
+		assertEquals((long) (PathB1.getLength()), (long) (PathD1.getLength()));
 
 	}
 
-	// Test du plus court chemin, et compare avec le chemin obtenu avec Bellman Ford 
+	// Test du plus court chemin, et compare les temps de voyage avec le temps de voyage avec Bellman Ford comme référence 
 	@Test
 	public void Test2() {
-		assertEquals((long) (shortPathA.getMinimumTravelTime()), (long) (shortPathB.getMinimumTravelTime()));
-		assertEquals((long) (shortPathB.getMinimumTravelTime()), (long) (shortPathD.getMinimumTravelTime()));
-		assertEquals((long) (shortPathA4.getMinimumTravelTime()), (long) (shortPathB4.getMinimumTravelTime()));
-		assertEquals((long) (shortPathB4.getMinimumTravelTime()), (long) (shortPathD4.getMinimumTravelTime()));
+		assertEquals((long) (PathA.getMinimumTravelTime()), (long) (PathB.getMinimumTravelTime()));
+		assertEquals((long) (PathB.getMinimumTravelTime()), (long) (PathD.getMinimumTravelTime()));
+		assertEquals((long) (PathA1.getMinimumTravelTime()), (long) (PathB1.getMinimumTravelTime()));
+		assertEquals((long) (PathB1.getMinimumTravelTime()), (long) (PathD1.getMinimumTravelTime()));
 
 	}
 
 	// Test d'un chemin de longueur nulle, on vérifie s'il est faisable
 	@Test
 	public void Test3() {
-		assertTrue(emptyPathA.equals(AbstractSolution.Status.INFEASIBLE));
-		assertTrue(emptyPathD.equals(AbstractSolution.Status.INFEASIBLE));
+		assertTrue(emptyA.equals(AbstractSolution.Status.INFEASIBLE));
+		assertTrue(emptyD.equals(AbstractSolution.Status.INFEASIBLE));
 	}
 
-	// Test d'un Chemin inexistant, on vérifie s'il est faisable
+	// Test d'un chemin inexistant, on vérifie s'il est faisable
 	@Test
 	public void Test4() {
-		assertTrue(nonexistentPathD.equals(AbstractSolution.Status.INFEASIBLE));
-		assertTrue(nonexistentPathA.equals(AbstractSolution.Status.INFEASIBLE));
+		assertTrue(nonexistentD.equals(AbstractSolution.Status.INFEASIBLE));
+		assertTrue(nonexistentA.equals(AbstractSolution.Status.INFEASIBLE));
 	}
 
 }
